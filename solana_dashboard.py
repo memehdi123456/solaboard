@@ -466,5 +466,15 @@ st.subheader("🗣️ Analyse du sentiment Twitter (100 derniers tweets)")
 sentiment_result = get_sentiment_twitter()
 st.info(sentiment_result)
 
+# === Chargement et traitement des données ===
+fg_index = get_fear_greed_index()
+sol_data = get_sol_data()
+sol_data = calculate_rsi(sol_data)
+signals, change_30d, rsi_now, last_price = detect_signals(sol_data, fg_index)
+
+if signals:
+    for sig in signals:
+        st.write(sig)
+
 
 
