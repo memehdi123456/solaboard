@@ -445,14 +445,20 @@ for _, row in news_df.iterrows():
     else:
         st.warning(row["title"])
 
-# === MODULE SENTIMENT TWITTER ===
+# === MODULE SENTIMENT TWITTER (MOCKED TWEETS POUR EXEMPLE) ===
 def get_sentiment_twitter():
-    analyzer = SentimentIntensityAnalyzer()
-    query = "Solana lang:en"
-    tweets = [tweet.content for tweet in sntwitter.TwitterSearchScraper(query).get_items() if 'solana' in tweet.content.lower()][:100]
+    # Exemples de tweets (à remplacer par de vrais tweets via API ou scraping autorisé)
+    tweets = [
+        "Solana is performing great! Huge potential ahead.",
+        "I'm not sure about Solana right now.",
+        "Solana crashed hard today, terrible news.",
+        "Solana ecosystem looks strong for long-term.",
+        "Solana fees are too high now."
+    ]
     if not tweets:
         return "⏳ Aucun tweet trouvé"
-    scores = [analyzer.polarity_scores(t)['compound'] for t in tweets]
+
+    scores = [TextBlob(t).sentiment.polarity for t in tweets]
     avg_score = np.mean(scores)
     if avg_score > 0.2:
         return f"✅ Sentiment Twitter positif ({round(avg_score, 2)})"
@@ -461,7 +467,7 @@ def get_sentiment_twitter():
     else:
         return f"⚪ Sentiment Twitter neutre ({round(avg_score, 2)})"
 
-st.subheader("🗣️ Analyse du sentiment Twitter (100 derniers tweets)")
+st.subheader("🗣️ Analyse du sentiment Twitter (extrait simulé)")
 sentiment_result = get_sentiment_twitter()
 st.info(sentiment_result)
 
@@ -478,6 +484,7 @@ if signals:
 # === Fin propre ===
 st.subheader("✅ Fin du traitement des données")
 st.write("Le tableau de bord s'est exécuté correctement jusqu'au bout.")
+
 
 
 
