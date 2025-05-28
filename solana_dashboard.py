@@ -476,5 +476,9 @@ if signals:
     for sig in signals:
         st.write(sig)
 
+# === Fin propre ===
+st.subheader("✅ Fin du traitement des données")
+st.write("Le tableau de bord s'est exécuté correctement jusqu'au bout.")
+
 
 
