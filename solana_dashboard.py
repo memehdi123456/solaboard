@@ -12,7 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import feedparser
 from textblob import TextBlob
-from bs4 import BeautifulSoup
+
 
 st.set_page_config(page_title="Solana Market Signals", layout="wide")
 st.title("📊 Solana Market Signals")
@@ -472,51 +472,7 @@ st.subheader("🗣️ Analyse du sentiment Twitter (extrait simulé)")
 sentiment_result = get_sentiment_twitter()
 st.info(sentiment_result)
 
-# === Chargement et traitement des données ===
-fg_index = get_fear_greed_index()
-sol_data = get_sol_data()
-sol_data = calculate_rsi(sol_data)
-signals, change_30d, rsi_now, last_price = detect_signals(sol_data, fg_index)
 
-if signals:
-    for sig in signals:
-        st.write(sig)
-
-# === CALENDRIER DES ÉVÉNEMENTS SOLANA ===
-def get_solana_events():
-    url = "https://solana.com/events"
-    try:
-        html = requests.get(url).text
-        soup = BeautifulSoup(html, "html.parser")
-        items = soup.find_all("div", class_="event-card")
-        events = []
-        for item in items:
-            title = item.find("h3")
-            date = item.find("time")
-            link = item.find("a")
-            if title and date and link:
-                events.append({
-                    "title": title.text.strip(),
-                    "date": date.text.strip(),
-                    "link": "https://solana.com" + link.get("href")
-                })
-        return events[:10] if events else []
-    except Exception as e:
-        return [{"title": f"Erreur : {e}", "date": "", "link": ""}]
-
-st.subheader("📅 Événements à venir (Solana officiel)")
-for event in get_solana_events():
-    st.markdown(f"**{event['date']}** — [{event['title']}]({event['link']})")
-
-# === Chargement et traitement des données ===
-fg_index = get_fear_greed_index()
-sol_data = get_sol_data()
-sol_data = calculate_rsi(sol_data)
-signals, change_30d, rsi_now, last_price = detect_signals(sol_data, fg_index)
-
-if signals:
-    for sig in signals:
-        st.write(sig)
 
 # === Fin propre ===
 st.subheader("✅ Fin du traitement des données")
