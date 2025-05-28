@@ -11,8 +11,7 @@ from sklearn.pipeline import make_pipeline
 import numpy as np
 import matplotlib.pyplot as plt
 import feedparser
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-import snscrape.modules.twitter as sntwitter
+from textblob import TextBlob
 
 st.set_page_config(page_title="Solana Market Signals", layout="wide")
 st.title("📊 Solana Market Signals")
