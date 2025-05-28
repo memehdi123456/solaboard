@@ -11,6 +11,8 @@ from sklearn.pipeline import make_pipeline
 import numpy as np
 import matplotlib.pyplot as plt
 import feedparser
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+import snscrape.modules.twitter as sntwitter
 
 st.set_page_config(page_title="Solana Market Signals", layout="wide")
 st.title("📊 Solana Market Signals")
@@ -443,6 +445,26 @@ for _, row in news_df.iterrows():
         st.markdown(f"- [{row['title']}]({row['link']}) ({row['source']} - {row['pubDate'][:10]})")
     else:
         st.warning(row["title"])
+
+# === MODULE SENTIMENT TWITTER ===
+def get_sentiment_twitter():
+    analyzer = SentimentIntensityAnalyzer()
+    query = "Solana lang:en"
+    tweets = [tweet.content for tweet in sntwitter.TwitterSearchScraper(query).get_items() if 'solana' in tweet.content.lower()][:100]
+    if not tweets:
+        return "⏳ Aucun tweet trouvé"
+    scores = [analyzer.polarity_scores(t)['compound'] for t in tweets]
+    avg_score = np.mean(scores)
+    if avg_score > 0.2:
+        return f"✅ Sentiment Twitter positif ({round(avg_score, 2)})"
+    elif avg_score < -0.2:
+        return f"🔻 Sentiment Twitter négatif ({round(avg_score, 2)})"
+    else:
+        return f"⚪ Sentiment Twitter neutre ({round(avg_score, 2)})"
+
+st.subheader("🗣️ Analyse du sentiment Twitter (100 derniers tweets)")
+sentiment_result = get_sentiment_twitter()
+st.info(sentiment_result)
 
 
 
