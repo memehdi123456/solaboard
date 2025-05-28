@@ -6,6 +6,4 @@ pandas
 matplotlib
 streamlit-autorefresh
 feedparser
-vaderSentiment
-snscrape
-
+textblob
